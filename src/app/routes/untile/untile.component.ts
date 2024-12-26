@@ -33,7 +33,9 @@ export class UntileComponent {
       localStorage.setItem('bg', this.bg);
     };
   };
+  convert = (preview: HTMLImageElement, width?: number, height?: number) => (width ? (width * preview.width) / preview.naturalWidth : height ? (height * preview.height) / preview.naturalHeight : 0);
   loadCharacters = (event: FileUploadHandlerEvent) => {
+    this.characters = [];
     let promises: Promise<Character>[] = [];
     for (let file of event.files) {
       promises.push(
@@ -56,9 +58,9 @@ export class UntileComponent {
     this.draggedRank = index;
   }
   onDrop(dropIndex: number) {
-    const character = this.characters[this.draggedRank]; // get element
-    this.characters.splice(this.draggedRank, 1); // delete from old position
-    this.characters.splice(dropIndex, 0, character); // add to new position
+    const character = this.characters[this.draggedRank];
+    this.characters.splice(this.draggedRank, 1);
+    this.characters.splice(dropIndex, 0, character);
   }
   generate = () => {
     localStorage.setItem('order', JSON.stringify(this.characters.map((character) => character.filename)));

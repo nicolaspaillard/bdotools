@@ -1,12 +1,18 @@
-<div class="container mx-auto text-center" *ngIf="bg">
+<div class="container mx-auto text-center">
   <p-button *ngIf="characters.length" label="Generate" (onClick)="generate()" />
   <p-fileupload *ngIf="bg" mode="basic" accept="image/*" chooseLabel="Characters" chooseIcon="pi pi-upload" [auto]="true" [multiple]="true" [customUpload]="true" (uploadHandler)="loadCharacters($event)" />
-  <div class="grid grid-cols-7">
-    <div class="relative cursor-move" *ngFor="let character of characters; let index = index" pDraggable="character" pDroppable="character" (onDragStart)="onDragStart(index)" (onDrop)="onDrop(index)">
-      <img [src]="character.image" class="pointer-events-none block" />
-      <span class="absolute left-0 top-0 w-full">{{ character.filename }}</span>
+  <div class="relative mx-auto max-w-[1000px]">
+    <img #preview src="assets/img/preview.jpg" />
+    <div class="absolute" [style.left]="convert(preview, 22, undefined) + 'px'" [style.top]="convert(preview, undefined, 294) + 'px'" [style.right]="convert(preview, 48, undefined) + 'px'">
+      <div class="grid grid-cols-7" [style.rowGap]="convert(preview, 10, undefined) + 'px'" [style.columnGap]="convert(preview, 9.5, undefined) + 'px'">
+        <div class="relative block cursor-move overflow-hidden rounded" *ngFor="let character of characters; let index = index" pDraggable="character" pDroppable="character" (onDragStart)="onDragStart(index)" (onDrop)="onDrop(index)">
+          <img [src]="character.image" class="pointer-events-none block" [width]="convert(preview, 250, undefined)" [height]="convert(preview, 320, undefined)" />
+          <span class="absolute left-0 top-0 block w-full">{{ character.filename }}</span>
+        </div>
+      </div>
     </div>
   </div>
+
   <p-fileupload mode="basic" accept="image/*" chooseLabel="Background" chooseIcon="pi pi-upload" [auto]="true" [customUpload]="true" (uploadHandler)="loadBg($event)" />
   <img id="bg" [src]="bg" class="block w-full" />
 </div>
