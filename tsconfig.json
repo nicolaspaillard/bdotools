@@ -11,6 +11,7 @@
     "noImplicitAny": false,
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
+    "checkJs": true,
     "isolatedModules": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
@@ -28,7 +29,8 @@
       "@models/*": ["src/app/shared/models/*"],
       "@routes/*": ["src/app/routes/*"],
       "@app/*": ["src/app/*"]
-    }
+    },
+    "typeRoots": ["node_modules/primeng"]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
