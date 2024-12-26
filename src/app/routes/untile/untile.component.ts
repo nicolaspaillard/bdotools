@@ -1,9 +1,10 @@
+import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import JSZip from 'jszip';
 import { ButtonModule } from 'primeng/button';
-import { DragDropModule } from 'primeng/dragdrop';
 import { FileUploadHandlerEvent, FileUploadModule } from 'primeng/fileupload';
+import { StepperModule } from 'primeng/stepper';
 
 interface Character {
   filename: string;
@@ -15,57 +16,38 @@ const face = {
 };
 @Component({
   selector: 'app-untile',
-  imports: [FileUploadModule, CommonModule, DragDropModule, ButtonModule],
+  imports: [FileUploadModule, CommonModule, ButtonModule, StepperModule, DragDropModule, StepperModule],
   templateUrl: './untile.component.html',
 })
 export class UntileComponent {
   bg?: string;
   characters: Character[] = [];
-  draggedRank: number = 0;
   constructor() {
     if (localStorage.getItem('bg')) this.bg = localStorage.getItem('bg')!;
   }
   loadBg = (event: FileUploadHandlerEvent) => {
-    const fileReader = new FileReader();
-    fileReader.readAsDataURL(event.files[0]);
-    fileReader.onloadend = (readerEvent: ProgressEvent<FileReader>) => {
-      this.bg = readerEvent.target!.result!.toString();
+    let reader = new FileReader();
+    reader.readAsDataURL(event.files[0]);
+    reader.onload = () => {
+      this.bg = reader.result as string;
       localStorage.setItem('bg', this.bg);
     };
   };
-  convert = (preview: HTMLImageElement, width?: number, height?: number) => (width ? (width * preview.width) / preview.naturalWidth : height ? (height * preview.height) / preview.naturalHeight : 0);
+  convert = (preview: HTMLImageElement, { width, height }: { width?: number; height?: number }) => (width ? (width * preview.width) / preview.naturalWidth : height ? (height * preview.height) / preview.naturalHeight : 0);
   loadCharacters = (event: FileUploadHandlerEvent) => {
     this.characters = [];
-    let promises: Promise<Character>[] = [];
-    for (let file of event.files) {
-      promises.push(
-        new Promise<Character>((resolve) => {
-          const fileReader = new FileReader();
-          fileReader.readAsDataURL(file);
-          fileReader.onloadend = (readerEvent: ProgressEvent<FileReader>) => resolve({ filename: file.name, image: readerEvent.target!.result!.toString() });
-        }),
-      );
+    for (let file of event.files) this.characters.push({ filename: file.name, image: URL.createObjectURL(file) });
+    if (localStorage.getItem('order')) {
+      const order: string[] = JSON.parse(localStorage.getItem('order')!);
+      this.characters.sort((a, b) => order.indexOf(a.filename) - order.indexOf(b.filename));
     }
-    Promise.all(promises).then((characters) => {
-      this.characters = characters;
-      if (localStorage.getItem('order')) {
-        const order: string[] = JSON.parse(localStorage.getItem('order')!);
-        this.characters.sort((a, b) => order.indexOf(a.filename) - order.indexOf(b.filename));
-      }
-    });
   };
-  onDragStart(index: number) {
-    this.draggedRank = index;
-  }
-  onDrop(dropIndex: number) {
-    const character = this.characters[this.draggedRank];
-    this.characters.splice(this.draggedRank, 1);
-    this.characters.splice(dropIndex, 0, character);
-  }
+  drop = (event: CdkDragDrop<Character[]>) => moveItemInArray(this.characters, event.previousIndex, event.currentIndex);
   generate = () => {
     localStorage.setItem('order', JSON.stringify(this.characters.map((character) => character.filename)));
     let canvas = document.createElement('canvas');
-    let background = document.getElementById('bg') as HTMLImageElement;
+    let background = document.createElement('img');
+    background.src = this.bg!;
     canvas.width = background.naturalWidth;
     canvas.height = background.naturalHeight;
     canvas.getContext('2d')!.drawImage(background, 0, 0);
@@ -82,7 +64,6 @@ export class UntileComponent {
       crop.width = convert({ height: crop.height });
       crop.offsetX = (background.naturalWidth - crop.width * cols) / 2;
     }
-    console.log(crop);
     let line = 0;
     let column = 0;
     const zip = new JSZip();
