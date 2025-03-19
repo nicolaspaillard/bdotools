@@ -2,19 +2,22 @@ import { animate, group, query, style, transition, trigger } from '@angular/anim
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
+import { AuthService } from '@services/auth.service';
 import { ButtonModule } from 'primeng/button';
 import { routes } from 'src/main';
 
-export const slide = trigger('routeAnimations', [transition(':increment', slideTo('right')), transition(':decrement', slideTo('left'))]);
-
 @Component({
   selector: 'app-root',
-  animations: [slide],
+  animations: [trigger('routeAnimations', [transition(':increment', slideTo('right')), transition(':decrement', slideTo('left'))])],
   imports: [RouterModule, CommonModule, ButtonModule],
   templateUrl: './app.component.html',
 })
 export class AppComponent {
+  user: any;
   routes: Route[] = routes.filter((route) => route.path && route.data);
+  constructor(private authService: AuthService) {
+    this.authService.user().subscribe((user) => (this.user = user));
+  }
 }
 function slideTo(direction: any) {
   const optional = { optional: true };
