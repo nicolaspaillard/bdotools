@@ -46,8 +46,7 @@
           },
           "configurations": {
             "production": {
-              "outputHashing": "all",
-              "baseHref": "/bdotools/"
+              "outputHashing": "all"
             },
             "development": {
               "optimization": false,
