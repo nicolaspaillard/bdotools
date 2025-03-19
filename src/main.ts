@@ -33,21 +33,15 @@ bootstrapApplication(AppComponent, {
     ),
     provideAnimationsAsync(),
     providePrimeNG({
-      theme: {
-        preset: Aura,
-      },
-      ripple: true,
+      theme: {        preset: Aura,},      ripple: true,
     }),
-    provideFirebaseApp(() => initializeApp({ projectId: 'bdo-tools-8ee84', appId: '1:1080259118563:web:78a0c99876678cf7810cd6', storageBucket: 'bdo-tools-8ee84.firebasestorage.app', apiKey: 'AIzaSyBVgoYHyhh6FlTzfT6Q8RSvp605TJKhn0o', authDomain: 'bdo-tools-8ee84.firebaseapp.com', messagingSenderId: '1080259118563', measurementId: 'G-TSCD1RDJ8F' })),
+    provideFirebaseApp(() => initializeApp({ 
+      projectId: 'bdo-tools-8ee84', appId: '1:1080259118563:web:78a0c99876678cf7810cd6', storageBucket: 'bdo-tools-8ee84.firebasestorage.app', apiKey: 'AIzaSyBVgoYHyhh6FlTzfT6Q8RSvp605TJKhn0o', authDomain: 'bdo-tools-8ee84.firebaseapp.com', messagingSenderId: '1080259118563', measurementId: 'G-TSCD1RDJ8F' })),
     provideAuth(() => getAuth()),
     provideAnalytics(() => getAnalytics()),
     ScreenTrackingService,
     UserTrackingService,
-    provideAppCheck(() => {
-      // TODO get a reCAPTCHA Enterprise here https://console.cloud.google.com/security/recaptcha?project=_
-      const provider = new ReCaptchaEnterpriseProvider('6LcwbfkqAAAAAJTFap35siG1v2WfJkjZXHVwnA3C');
-      return initializeAppCheck(undefined, { provider, isTokenAutoRefreshEnabled: true });
-    }),
+    provideAppCheck(() => initializeAppCheck(undefined, { provider: new ReCaptchaEnterpriseProvider('6LcwbfkqAAAAAJTFap35siG1v2WfJkjZXHVwnA3C'), isTokenAutoRefreshEnabled: true })),
     provideFirestore(() => getFirestore()),
   ],
 }).catch((err) => console.error(err));
