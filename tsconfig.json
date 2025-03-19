@@ -27,7 +27,7 @@
       "@models/*": ["src/app/shared/models/*"],
       "@routes/*": ["src/app/routes/*"],
       "@app/*": ["src/app/*"]
-    },
+    }
     // "typeRoots": ["node_modules/primeng"]
   },
   "angularCompilerOptions": {
