@@ -1,0 +1,19 @@
+<div class="mb-2 flex justify-center gap-2">
+  <p-fileupload [auto]="true" [multiple]="true" [customUpload]="true" (uploadHandler)="loadCharacters($event)" mode="basic" accept="image/*" chooseLabel="Characters" chooseIcon="pi pi-upload" />
+</div>
+<div class="relative mx-auto max-w-[1000px]">
+  <img class="w-full" #preview src="assets/img/clear.jpg" />
+  <div class="absolute inset-0 pt-40 px-2 pb-20">
+    <div class="h-full overflow-y-auto">
+      <div class="grid grid-cols-7 gap-2" (cdkDropListDropped)="drop($event)" cdkDropList cdkDropListOrientation="mixed">
+        <div class="relative block cursor-move overflow-hidden rounded transition-shadow group" *ngFor="let character of characters; let index = index" cdkDrag>
+          <img class="pointer-events-none block" [src]="character.image" />
+          <div class="absolute inset-0 opacity-0 group-hover:opacity-100 bg-black/50 transition-opacity p-2 flex flex-col">
+            <p-button class="ml-auto" icon="pi pi-pencil" size="small"></p-button>
+            <span class="pointer-events-none text-xs">File name : {{ character.filename }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
