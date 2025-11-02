@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { DropdownModule } from 'primeng/dropdown';
+import { SelectModule } from 'primeng/select';
 
 interface pos {
   x: number;
@@ -10,27 +10,27 @@ interface pos {
 }
 
 interface bdoNode {
-  key: number;
-  pos: pos;
-  kind: number;
   CP: number;
-  is_main: number;
   has_lodging: boolean;
+  is_main: number;
   is_planttown: boolean;
   is_plantzone: boolean;
+  key: number;
+  kind: number;
   name: string;
+  pos: pos;
 }
 
 @Component({
   selector: 'app-trade',
-  imports: [CommonModule, DropdownModule, FormsModule],
+  imports: [CommonModule, SelectModule, FormsModule],
   templateUrl: './trade.component.html',
 })
 export class TradeComponent {
+  distances: { distance: number; town: string }[];
   nodes: bdoNode[] = [];
-  towns: bdoNode[] = [];
   source: pos;
-  distances: { town: string; distance: number }[];
+  towns: bdoNode[] = [];
   constructor() {
     fetch('https://raw.githubusercontent.com/shrddr/shrddr.github.io/refs/heads/main/workerman/data/loc.json')
       .then((response) => response.json())

@@ -1,5 +1,5 @@
 <div class="container mx-auto">
-  <p-dropdown [options]="nodes" [(ngModel)]="source" [filter]="true" placeholder="Select a Node" optionLabel="name" optionValue="pos" (onChange)="getDistances($event.value)"></p-dropdown>
+  <p-select [(ngModel)]="source" [options]="nodes" [filter]="true" (onChange)="getDistances($event.value)" placeholder="Select a Node" optionLabel="name" optionValue="pos"></p-select>
   <table *ngIf="source && distances">
     <thead>
       <th>Town</th>

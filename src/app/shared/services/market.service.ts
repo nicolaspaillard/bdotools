@@ -26,21 +26,21 @@ export class MarketService {
     const defaultDate = new Date();
     defaultDate.setHours(defaultDate.getHours() - 3);
     this._getPearlItems(defaultDate).subscribe({
-      next: (res) => {
-        this._pearlItems.next(<PearlItem[]>res);
-      },
+      next: (res: PearlItem[]) => this._pearlItems.next(res.map((item) => new PearlItem(item))),
       error: (err) => console.log(err),
     });
   }
   db = () => this._db.asObservable();
   getPearlItems = (date: Date) => {
     this._getPearlItems(date).subscribe({
-      next: (res) => {
-        this._pearlItems.next(<PearlItem[]>res);
-      },
+      next: (res: PearlItem[]) => this._pearlItems.next(res.map((item) => new PearlItem(item))),
       error: (err) => console.log(err),
     });
   };
   pearlItems = () => this._pearlItems.asObservable();
-  private _getPearlItems = (date: Date): Observable<any> => this.http.get(API_URL + 'pearlitems?date=' + formatDate(date, 'yyyy-MM-dd hh:00:00', 'fr-FR'));
+  private _getPearlItems = (date: Date): Observable<any> => {
+    let url = API_URL + 'pearlitems?date=' + formatDate(date, 'yyyy-MM-dd hh:00:00', 'fr-FR');
+    console.log(url);
+    return this.http.get(url);
+  };
 }

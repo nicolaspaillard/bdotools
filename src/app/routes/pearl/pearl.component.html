@@ -20,7 +20,10 @@
           Preorders
           <p-sortIcon field="Preorders" />
         </th>
-        <th>%</th>
+        <th pSortableColumn="Percentage">
+          %
+          <p-sortIcon field="Percentage" />
+        </th>
         <th>Estimated Time</th>
       </tr>
     </ng-template>
@@ -30,7 +33,7 @@
         <td>{{ item.Itemid }}</td>
         <td>{{ item.Sold }}</td>
         <td>{{ item.Preorders }}</td>
-        <td></td>
+        <td>{{ item.Percentage }}</td>
         <td></td>
       </tr>
     </ng-template>
