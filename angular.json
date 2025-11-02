@@ -4,6 +4,9 @@
   "newProjectRoot": "projects",
   "projects": {
     "bdotools": {
+      "i18n": {
+        "sourceLocale": "fr-FR"
+      },
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -92,5 +95,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }
